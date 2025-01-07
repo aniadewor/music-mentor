@@ -1,14 +1,25 @@
 package com.musicmentor.musicmentor.model;
 
+//import lombok.AllArgsConstructor;
+//import lombok.Getter;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
+
+//@Getter
+//@Setter
+//@AllArgsConstructor
+//@NoArgsConstructor
+
 public class User {
     private Integer id;
     private String name;
     private String lastName;
     private String email;
     private String password;
-    private String role;
+    private Role role;
 
-    public User(Integer id, String name, String email, String lastName, String password, String role) {
+
+    public User(Integer id, String name, String email, String lastName, String password, Role role) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -16,7 +27,8 @@ public class User {
         this.password = password;
         this.role = role;
     }
-    public User(){
+
+    public User() {
 
     }
 
@@ -52,11 +64,11 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -68,3 +80,4 @@ public class User {
         this.password = password;
     }
 }
+
