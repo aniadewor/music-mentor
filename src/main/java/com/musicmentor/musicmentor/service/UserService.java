@@ -11,10 +11,15 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    public User addUser(User user) {
+    public User registerUser(User user) {
+        //sprawdzenie czy e-mail użytkownika istnieje w bazie
+        //szyfrowanie hasła
         return userRepository.save(user);
     }
     public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id);
+    }
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

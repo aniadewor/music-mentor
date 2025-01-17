@@ -1,10 +1,7 @@
 package com.musicmentor.musicmentor.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name="users")
@@ -19,8 +16,11 @@ public class User {
     private Integer id;
     private String name;
     private String lastName;
+    @NonNull
     private String email;
+    @NonNull
     private String password;
+   // @Enumerated(EnumType.STRING)
     private Role role;
 }
 

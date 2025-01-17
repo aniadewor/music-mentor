@@ -4,6 +4,7 @@ import com.musicmentor.musicmentor.model.Role;
 import com.musicmentor.musicmentor.model.User;
 import com.musicmentor.musicmentor.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,55 +12,43 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
     private UserService userService;
 
     public UserController() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("John Doe");
-        user1.setEmail("john.doe@gmail.com");
-        user1.setPassword("password");
-        user1.setRole(Role.STUDENT);
-        users.add(user1);
     }
 
-    @PostMapping("/add")
-    public User addUser(@RequestBody User user) {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setName("John Doe");
-        user1.setEmail("john.doe@gmail.com");
-        user1.setPassword("password");
-        user1.setRole(Role.STUDENT);
-        return user1;
-    }
-    @PostMapping("/addUser")
-    public ResponseEntity<User> addUser1(@RequestBody User user) {
+    @PostMapping("/registerUser")
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
         System.out.println("Received user: " + user);
-        users.add(user);
+        userService.registerUser(user);
+        // bad request
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Integer id) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }
+         else {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
-   return userService.getUserById(id);
-//        Optional<User> user = users.stream().filter(user1 -> user1.getId() == id).findFirst();
     }
 
     @GetMapping("/email/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email)
-    //@PathVariable oznacza, że wartość {email} z adresu URL zostanie przekazana do parametru metody email.
+    public User getUserByEmail(@PathVariable String email)
     {
-        return users.stream() //users.stream() tworzy strumień (Stream) z obiektów w tej liście.
-                .filter(u -> u.getEmail().equalsIgnoreCase(email))
-                //filter(...) przesiewa elementy strumienia, pozostawiając tylko te, dla których warunek jest prawdziwy.
-                .findFirst();
-
-        }
+        return userService.getUserByEmail(email);
     }
+}
