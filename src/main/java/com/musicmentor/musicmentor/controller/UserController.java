@@ -2,6 +2,7 @@ package com.musicmentor.musicmentor.controller;
 
 import com.musicmentor.musicmentor.model.Role;
 import com.musicmentor.musicmentor.model.User;
+import com.musicmentor.musicmentor.request.LoginRequest;
 import com.musicmentor.musicmentor.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -35,15 +36,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping("/loginUser")
-    public ResponseEntity<?> loginUser(@RequestBody String email, @RequestBody String password, HttpSession session) {
-        System.out.println("Received user: " + email);
-        boolean success = userService.loginUser(email, password, session);
+    @PostMapping("/loginUser")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        System.out.println("Received user: " + loginRequest.getEmail());
+        boolean success = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword(), session);
        if (success) {
-           return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByEmail(email));
+           return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByEmail(loginRequest.getEmail()));
        }
        else {
-           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
        }
     }
 

@@ -2,6 +2,7 @@ package com.musicmentor.musicmentor.service;
 
 import com.musicmentor.musicmentor.model.User;
 import com.musicmentor.musicmentor.repository.UserRepository;
+import com.musicmentor.musicmentor.security.HashUntil;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,12 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    //@Autowired
-    //private PasswordEncoder passwordEncoder;
+
     public User registerUser(User user) {
      if(getUserByEmail(user.getEmail())!=null){
          throw new IllegalArgumentException("Email already exists");
      }
-//     String encryptedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encryptedPassword);
-
+     user.setPassword(HashUntil.hashPassword(user.getPassword()));
         return userRepository.save(user);
     }
     public Optional<User> getUserById(Integer id) {
@@ -32,11 +30,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
     public boolean loginUser(String email, String password, HttpSession session) {
+        String hashedPassword = HashUntil.hashPassword(password);
         if(getUserByEmail(email) == null) {
             throw new IllegalArgumentException("Email not found");
         }
         User user = getUserByEmail(email);
-        if(user.getPassword().equals(password)) {
+        if(user.getPassword().equals(hashedPassword)){
             session.setAttribute("user", user);
         }
         else {
