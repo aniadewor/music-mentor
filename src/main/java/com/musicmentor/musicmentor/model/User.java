@@ -3,6 +3,8 @@ package com.musicmentor.musicmentor.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="users")
 @Getter
@@ -13,6 +15,7 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer id;
     private String name;
     private String lastName;
@@ -22,5 +25,8 @@ public class User {
     private String password;
    // @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToMany
+    @JoinColumn(name = "quiz_id", nullable = false)
+    private List<Quiz> quizzes;
 }
 
