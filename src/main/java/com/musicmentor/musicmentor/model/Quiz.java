@@ -19,7 +19,14 @@ public class Quiz {
     private String title;
     private String description;
     private int score;
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private List<User> userList;
+    private User owner;
+    @ManyToMany
+    @JoinTable(
+            name = "quiz_users",
+            joinColumns = @JoinColumn(name = "quiz_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
 }

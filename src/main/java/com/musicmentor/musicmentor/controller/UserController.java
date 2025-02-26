@@ -19,14 +19,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @Autowired
     private UserService userService;
 
     public UserController() {
+    }
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/registerUser")

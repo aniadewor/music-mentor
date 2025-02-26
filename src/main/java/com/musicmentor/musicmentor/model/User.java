@@ -25,8 +25,7 @@ public class User {
     private String password;
    // @Enumerated(EnumType.STRING)
     private Role role;
-    @ManyToMany
-    @JoinColumn(name = "quiz_id", nullable = false)
+    @ManyToMany(mappedBy = "users")
     private List<Quiz> quizzes;
 }
 
