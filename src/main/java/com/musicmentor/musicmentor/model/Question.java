@@ -3,6 +3,9 @@ package com.musicmentor.musicmentor.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="questions")
 @Getter
@@ -21,7 +24,14 @@ public class Question {
     @NonNull
     private String question;
     @NonNull
-    private String answer;
+    private String answer1;
+    @NonNull
+    private String answer2;
+    @NonNull
+    private String answer3;
+    @NonNull
+    private String answer4;
+    private String correctAnswer;
     private int score;
     @Enumerated(EnumType.STRING)
     private QuestionType type;

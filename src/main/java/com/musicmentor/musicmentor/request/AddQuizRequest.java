@@ -1,6 +1,5 @@
 package com.musicmentor.musicmentor.request;
 
-import com.musicmentor.musicmentor.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +8,5 @@ import lombok.Setter;
 public class AddQuizRequest {
     public String title;
     public String description;
-    public User owner;
+    public Integer ownerId;
 }
