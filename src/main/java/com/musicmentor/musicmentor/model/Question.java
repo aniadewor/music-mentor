@@ -3,9 +3,6 @@ package com.musicmentor.musicmentor.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name="questions")
 @Getter
@@ -18,11 +15,11 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "quiz_id", nullable = false)
-    private Quiz quizId;
+//    @ManyToOne
+//    @JoinColumn(name = "quiz_id", nullable = false)
+//    private Quiz quizId;
     @NonNull
-    private String question;
+    private String questionTitle;
     @NonNull
     private String answer1;
     @NonNull
