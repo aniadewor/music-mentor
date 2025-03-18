@@ -15,9 +15,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Integer id;
-//    @ManyToOne
-//    @JoinColumn(name = "quiz_id", nullable = false)
-//    private Quiz quizId;
+    @ManyToOne
+    @JoinColumn(name = "quiz_id", nullable = false)
+    private Quiz quiz;
     @NonNull
     private String questionTitle;
     @NonNull

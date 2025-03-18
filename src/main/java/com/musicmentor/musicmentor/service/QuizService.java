@@ -31,15 +31,18 @@ public class QuizService {
         user.setId(addQuizRequest.ownerId);
         quiz.setOwner(user);
 
-        addQuestions(addQuizRequest);
-
         owner = userService.getUserById(addQuizRequest.ownerId);
         if(owner.get().getRole() == Role.TEACHER){
-            return quizRepository.save(quiz);
+             quizRepository.save(quiz);
         }
         else {
             throw new IllegalArgumentException("Invalid role");
         }
+
+        addQuizRequest.setQuizId(quiz.getId());
+        addQuestions(addQuizRequest);
+
+        return quiz;
     }
 
     private void addQuestions(AddQuizRequest addQuizRequest) {

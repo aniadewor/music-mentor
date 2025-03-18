@@ -24,4 +24,11 @@ public class QuizController {
         quizService.addQuiz(quiz);
         return ResponseEntity.status(HttpStatus.CREATED).body(quiz);
     }
+    @PostMapping("/addQuestions")
+    public ResponseEntity<AddQuizRequest> addQuestions(@RequestBody AddQuizRequest quiz) {
+        System.out.println("Received user: " + quiz);
+        quizService.addQuiz(quiz);
+        return ResponseEntity.status(HttpStatus.CREATED).body(quiz);
+    }
+
 }

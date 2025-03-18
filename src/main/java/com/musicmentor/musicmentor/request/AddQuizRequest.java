@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AddQuizRequest {
+    public Integer quizId;
     public String title;
     public String description;
     public Integer ownerId;

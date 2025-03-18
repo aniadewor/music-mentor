@@ -2,6 +2,8 @@ package com.musicmentor.musicmentor.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,4 +25,6 @@ public class Quiz {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
     private int numberOfQuestions;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 }
