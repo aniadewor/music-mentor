@@ -6,6 +6,7 @@ import com.musicmentor.musicmentor.model.Role;
 import com.musicmentor.musicmentor.model.User;
 import com.musicmentor.musicmentor.repository.QuestionRepository;
 import com.musicmentor.musicmentor.repository.QuizRepository;
+import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,8 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private UserService userService;
     private final QuestionRepository questionRepository;
-    public Quiz addQuiz(AddQuizRequest addQuizRequest){
-        return createQuiz(addQuizRequest);
-    }
-    private Quiz createQuiz(AddQuizRequest addQuizRequest) {
+
+    public Quiz createQuiz(AddQuizRequest addQuizRequest) {
         Quiz quiz = new Quiz();
         User user = new User();
         Optional<User> owner = Optional.empty();
@@ -40,19 +39,19 @@ public class QuizService {
         }
 
         addQuizRequest.setQuizId(quiz.getId());
-        addQuestions(addQuizRequest);
 
         return quiz;
     }
 
-    private void addQuestions(AddQuizRequest addQuizRequest) {
-        for (int i = 0; i < addQuizRequest.getNumberOfQuestions(); i++ ) {
-           Question question = addQuizRequest.getQuestionList().get(i);
-            question.getQuestionTitle();
-            if (question.getQuestionTitle()==null){
-                throw new NullPointerException("Question title is null");
-            }
-            questionRepository.save(addQuizRequest.getQuestionList().get(i));
+    public void addQuestions(AddQuestionRequest addQuestionRequest) {
+        Quiz quiz = quizRepository.findById(addQuestionRequest.getQuizId()).orElseThrow(() -> new RuntimeException("Quiz not found"));
+
+        for (Question question : addQuestionRequest.getQuestionList()) {
+
+          question.setQuiz(quiz);
+          questionRepository.save(question);
+
+
         }
     }
 }
