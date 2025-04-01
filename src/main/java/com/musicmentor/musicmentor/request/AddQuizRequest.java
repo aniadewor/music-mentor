@@ -14,5 +14,5 @@ public class AddQuizRequest {
     public String description;
     public Integer ownerId;
     public int numberOfQuestions;
-    public List<Question> questionList;
+    public List<QuestionRequest> questionList;
 }

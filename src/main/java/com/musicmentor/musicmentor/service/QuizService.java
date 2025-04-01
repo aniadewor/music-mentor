@@ -8,9 +8,12 @@ import com.musicmentor.musicmentor.repository.QuestionRepository;
 import com.musicmentor.musicmentor.repository.QuizRepository;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
+import com.musicmentor.musicmentor.request.QuestionRequest;
+import com.musicmentor.musicmentor.response.QuizResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -31,10 +34,9 @@ public class QuizService {
         quiz.setOwner(user);
 
         owner = userService.getUserById(addQuizRequest.ownerId);
-        if(owner.get().getRole() == Role.TEACHER){
-             quizRepository.save(quiz);
-        }
-        else {
+        if (owner.get().getRole() == Role.TEACHER) {
+            quizRepository.save(quiz);
+        } else {
             throw new IllegalArgumentException("Invalid role");
         }
 
@@ -46,12 +48,31 @@ public class QuizService {
     public void addQuestions(AddQuestionRequest addQuestionRequest) {
         Quiz quiz = quizRepository.findById(addQuestionRequest.getQuizId()).orElseThrow(() -> new RuntimeException("Quiz not found"));
 
-        for (Question question : addQuestionRequest.getQuestionList()) {
+        for (QuestionRequest question : addQuestionRequest.getQuestionList()) {
+            Question questionToAdd = new Question();
+            questionToAdd.setQuiz(quiz);
+            questionToAdd.setAnswer1(question.getAnswer1());
+            questionToAdd.setAnswer2(question.getAnswer2());
+            questionToAdd.setAnswer3(question.getAnswer3());
+            questionToAdd.setAnswer4(question.getAnswer4());
+            questionToAdd.setScore(question.getScore());
+            questionToAdd.setCorrectAnswer(question.getCorrectAnswer());
+            questionToAdd.setType(question.getType());
+            questionToAdd.setQuestionTitle(question.getQuestionTitle());
 
-          question.setQuiz(quiz);
-          questionRepository.save(question);
-
-
+            questionRepository.save(questionToAdd);
         }
+    }
+
+    public QuizResponse getQuizById(Integer quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        List<Question> question = questionRepository.findAllByQuizId(quizId);
+        QuizResponse quizResponse = new QuizResponse();
+        quizResponse.setId(quiz.getId());
+        quizResponse.setTitle(quiz.getTitle());
+        quizResponse.setScore(quiz.getScore());
+        quizResponse.setDescription(quiz.getDescription());
+        quizResponse.setQuestionList(question);
+        return quizResponse;
     }
 }

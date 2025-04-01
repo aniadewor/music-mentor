@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class AddQuestionRequest {
     public Integer quizId;
-    public List<Question> questionList;
+    public List<QuestionRequest> questionList;
 }
