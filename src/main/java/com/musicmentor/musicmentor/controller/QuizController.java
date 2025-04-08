@@ -4,6 +4,7 @@ import com.musicmentor.musicmentor.model.Quiz;
 import com.musicmentor.musicmentor.model.User;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
+import com.musicmentor.musicmentor.response.QuizResponse;
 import com.musicmentor.musicmentor.service.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,14 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addQuestionRequest);
     }
 
+    @GetMapping ("/getQuizById")
+    public ResponseEntity<QuizResponse> getQuizById(@RequestParam Integer id) {
+        QuizResponse quiz = quizService.getQuizById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(quiz);
+    }
+    @PostMapping ("/updateQuizScore")
+    public ResponseEntity <?> updateQuizScore(@RequestParam Integer quizId) {
+        quizService.updateQuizScore(quizId);
+        return ResponseEntity.status(HttpStatus.OK).body(quizId);
+    }
 }

@@ -20,7 +20,7 @@ public class Quiz {
     @NonNull
     private String title;
     private String description;
-    private int score;
+    private int scoreSum;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;

@@ -70,9 +70,20 @@ public class QuizService {
         QuizResponse quizResponse = new QuizResponse();
         quizResponse.setId(quiz.getId());
         quizResponse.setTitle(quiz.getTitle());
-        quizResponse.setScore(quiz.getScore());
+        quizResponse.setScore(quiz.getScoreSum());
         quizResponse.setDescription(quiz.getDescription());
         quizResponse.setQuestionList(question);
         return quizResponse;
+    }
+    public int updateQuizScore(Integer quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        List<Question> question = questionRepository.findAllByQuizId(quizId);
+        int scoreSum =0;
+        for (Question question1 : question) {
+           scoreSum += question1.getScore();
+        }
+        quiz.setScoreSum(scoreSum);
+        quizRepository.save(quiz);
+        return scoreSum;
     }
 }
