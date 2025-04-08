@@ -1,5 +1,6 @@
 package com.musicmentor.musicmentor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Question {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
+    @JsonIgnore
     private Quiz quiz;
     @NonNull
     private String questionTitle;

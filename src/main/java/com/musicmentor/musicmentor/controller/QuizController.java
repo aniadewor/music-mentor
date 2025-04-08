@@ -41,7 +41,7 @@ public class QuizController {
     }
     @PostMapping ("/updateQuizScore")
     public ResponseEntity <?> updateQuizScore(@RequestParam Integer quizId) {
-        quizService.updateQuizScore(quizId);
-        return ResponseEntity.status(HttpStatus.OK).body(quizId);
+        int scoreSum = quizService.updateQuizScore(quizId);
+        return ResponseEntity.status(HttpStatus.OK).body(scoreSum);
     }
 }
