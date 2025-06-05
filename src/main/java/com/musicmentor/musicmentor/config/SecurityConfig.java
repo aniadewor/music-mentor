@@ -21,10 +21,14 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/v1/users/registerUser").permitAll()
-                        .requestMatchers("/api/v1/users/loginUser").permitAll()
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/api/v1/users/registerUser").permitAll()
+//                        .requestMatchers("/api/v1/quizzes/updateQuizScore").permitAll()
+//                        .requestMatchers("/api/v1/users/loginUser").permitAll()
+//                        .requestMatchers("/public/**").permitAll()
+//                        .requestMatchers("/api/v1/quizzes/getQuizzesByUserId").permitAll()
+                        .anyRequest().permitAll()
+//                        .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults());
 
@@ -47,7 +51,7 @@ public class SecurityConfig {
                 "Access-Control-Request-Headers"
         ));
         configuration.setExposedHeaders(List.of("Authorization"));
-
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

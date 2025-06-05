@@ -69,4 +69,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @GetMapping("/getBySchoolName")
+    public ResponseEntity<List<User>> getUserBySchoolName(@RequestParam String schoolName) {
+        List<User> users = userService.getAllUsersBySchoolName(schoolName);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+    @PostMapping("updateUserClassName")
+    public ResponseEntity<User> updateUserClassName(@RequestParam Integer id, @RequestParam String className) {
+        String updatedUserClassName = userService.updateUserClassName(id, className);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }

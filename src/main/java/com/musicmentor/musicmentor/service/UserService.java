@@ -8,7 +8,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -41,5 +44,14 @@ public class UserService {
             throw new IllegalArgumentException("Password incorrect");
         }
         return true;
+    }
+    public List<User> getAllUsersBySchoolName(String schoolName) {
+        List<User> allUsers = userRepository.findAll();
+        return userRepository.findAll().stream().filter(user -> user.getSchoolName()!= null && user.getSchoolName().equalsIgnoreCase(schoolName)).collect(Collectors.toList());
+    }
+    public String updateUserClassName(Integer id, String className) {
+        User user = userRepository.findById(id).get();
+        user.setClassName(className);
+        return userRepository.save(user).getClassName();
     }
 }

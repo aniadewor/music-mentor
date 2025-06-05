@@ -13,6 +13,7 @@ import com.musicmentor.musicmentor.response.QuizResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class QuizService {
         return quiz;
     }
 
-    public void addQuestions(AddQuestionRequest addQuestionRequest) {
+    public int addQuestions(AddQuestionRequest addQuestionRequest) {
         Quiz quiz = quizRepository.findById(addQuestionRequest.getQuizId()).orElseThrow(() -> new RuntimeException("Quiz not found"));
 
         for (QuestionRequest question : addQuestionRequest.getQuestionList()) {
@@ -61,7 +62,9 @@ public class QuizService {
             questionToAdd.setQuestionTitle(question.getQuestionTitle());
 
             questionRepository.save(questionToAdd);
+
         }
+        return updateQuizScore(addQuestionRequest.getQuizId());
     }
 
     public QuizResponse getQuizById(Integer quizId) {
@@ -85,5 +88,15 @@ public class QuizService {
         quiz.setScoreSum(scoreSum);
         quizRepository.save(quiz);
         return scoreSum;
+    }
+    public List<Quiz> getQuizzesByUserId(User owner) {
+       List<Quiz> quiz = quizRepository.findByOwner(owner);
+        return quiz;
+    }
+    public Quiz updateClassName(Integer quizId, List<String> className) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        quiz.setClassName(className);
+        quizRepository.save(quiz);
+        return quiz;
     }
 }
