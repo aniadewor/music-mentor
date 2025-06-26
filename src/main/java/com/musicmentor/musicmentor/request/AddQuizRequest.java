@@ -15,4 +15,5 @@ public class AddQuizRequest {
     public Integer ownerId;
     public int numberOfQuestions;
     public List<QuestionRequest> questionList;
+    public String schoolName;
 }

@@ -63,4 +63,9 @@ public class QuizController {
         Quiz quiz = quizService.updateClassName(quizId, className);
         return ResponseEntity.status(HttpStatus.OK).body(quiz);
     }
+    @PostMapping ("/getQuizzesByClass")
+    public ResponseEntity <List<Quiz>> getQuizzesByClass(@RequestParam String className, @RequestParam Integer userId) {
+        List <Quiz> quizList = quizService.getQuizzesByClass(className, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(quizList);
+    }
 }

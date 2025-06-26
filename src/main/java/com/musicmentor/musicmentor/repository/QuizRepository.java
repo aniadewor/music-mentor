@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface  QuizRepository extends JpaRepository<Quiz,Integer> {
     List<Quiz> findByOwner(User owner);
+    List<Quiz> findByClassName(String className);
+    List <Quiz> findBySchoolName(String schoolName);
 }
+

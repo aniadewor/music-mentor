@@ -13,9 +13,11 @@ import com.musicmentor.musicmentor.response.QuizResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -33,6 +35,7 @@ public class QuizService {
         quiz.setDescription(addQuizRequest.getDescription());
         user.setId(addQuizRequest.ownerId);
         quiz.setOwner(user);
+        quiz.setSchoolName(addQuizRequest.getSchoolName());
 
         owner = userService.getUserById(addQuizRequest.ownerId);
         if (owner.get().getRole() == Role.TEACHER) {
@@ -98,5 +101,19 @@ public class QuizService {
         quiz.setClassName(className);
         quizRepository.save(quiz);
         return quiz;
+    }
+    public List<Quiz> getQuizzesByClass(String className, Integer studentId) {
+        Optional<User> student = userService.getUserById(studentId);
+        String studentSchoolName = student.get().getSchoolName();
+        List<Quiz> quizList = quizRepository.findByClassName(className);
+        List <Quiz> quizListFilter = new ArrayList<>();
+        for (Quiz quiz1 : quizList) {
+            if (quiz1.getSchoolName() != null){
+                if (quiz1.getSchoolName().equals(studentSchoolName)){
+                    quizListFilter.add(quiz1);
+                }
+            }
+        }
+        return quizListFilter;
     }
 }

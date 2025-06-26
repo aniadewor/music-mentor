@@ -30,4 +30,5 @@ public class Quiz {
     @ElementCollection
     @Column(name = "class_name")
     private List<String> className = new ArrayList<>();
+    private String schoolName;
 }
