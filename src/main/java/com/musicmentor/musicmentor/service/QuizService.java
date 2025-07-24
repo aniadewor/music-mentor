@@ -1,9 +1,7 @@
 package com.musicmentor.musicmentor.service;
 
-import com.musicmentor.musicmentor.model.Question;
-import com.musicmentor.musicmentor.model.Quiz;
-import com.musicmentor.musicmentor.model.Role;
-import com.musicmentor.musicmentor.model.User;
+import com.musicmentor.musicmentor.model.*;
+import com.musicmentor.musicmentor.repository.AnswerRepository;
 import com.musicmentor.musicmentor.repository.QuestionRepository;
 import com.musicmentor.musicmentor.repository.QuizRepository;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
@@ -13,11 +11,9 @@ import com.musicmentor.musicmentor.response.QuizResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Service
@@ -25,6 +21,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private UserService userService;
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     public Quiz createQuiz(AddQuizRequest addQuizRequest) {
         Quiz quiz = new Quiz();
@@ -115,5 +112,22 @@ public class QuizService {
             }
         }
         return quizListFilter;
+    }
+    public List<Question> checkQuizCorrectAnswer(Integer quizId) {
+      Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+       List <Question> questionList =  quiz.getQuestions();
+       Map<Integer,String> answerList = new HashMap<>();
+       answerList.put(1,"answer1");
+        Stream<Question> questionStream = questionList.stream().filter(question -> question.getCorrectAnswer().equals(answerList.get(1)));
+        return questionList;
+    }
+    public Answer saveQuizAnswer (Integer quizId, Integer userId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        Answer answer = new Answer();
+        answer.setQuizId(quizId);
+        answer.setUserId(userId);
+       // answer.setAnswerList(answersMap);
+        answerRepository.save(answer);
+        return answer;
     }
 }

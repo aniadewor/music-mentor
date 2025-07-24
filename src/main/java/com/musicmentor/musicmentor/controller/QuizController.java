@@ -1,7 +1,6 @@
 package com.musicmentor.musicmentor.controller;
 
-import com.musicmentor.musicmentor.model.Quiz;
-import com.musicmentor.musicmentor.model.User;
+import com.musicmentor.musicmentor.model.*;
 import com.musicmentor.musicmentor.repository.UserRepository;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
@@ -67,5 +66,15 @@ public class QuizController {
     public ResponseEntity <List<Quiz>> getQuizzesByClass(@RequestParam String className, @RequestParam Integer userId) {
         List <Quiz> quizList = quizService.getQuizzesByClass(className, userId);
         return ResponseEntity.status(HttpStatus.OK).body(quizList);
+    }
+    @PostMapping("/saveQuizAnswer")
+    public ResponseEntity<Answer> saveQuizAnswer(@RequestParam Integer quizId, @RequestParam Integer userId) {
+        Answer answer = quizService.saveQuizAnswer(quizId, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(answer);
+    }
+    @PostMapping("/checkQuizCorrectAnswer")
+    public ResponseEntity <List<Question>> checkQuizCorrectAnswer (@RequestParam Integer quizId) {
+        List<Question> questionList = quizService.checkQuizCorrectAnswer(quizId);
+        return ResponseEntity.status(HttpStatus.OK).body(questionList);
     }
 }

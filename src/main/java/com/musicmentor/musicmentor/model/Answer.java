@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Entity
 @Table(name="answers")
 @Getter
@@ -19,6 +24,9 @@ public class Answer {
     @OneToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question questionId;
-    private String answer;
+    private Integer quizId;
+    private Integer userId;
+    @ElementCollection
+    private List<UserAnswer> answerList = new ArrayList<>();
     private boolean isCorrect;
 }
