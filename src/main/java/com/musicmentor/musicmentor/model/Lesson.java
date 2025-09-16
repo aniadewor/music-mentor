@@ -6,23 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
-@Table(name="answers")
+@Table(name="lesson")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Answer {
+public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer quizId;
-    private Integer userId;
-    @ElementCollection
-    private List<Integer> questionIdList = new ArrayList<>();
-    @ElementCollection
-    private List<String> studentAnswerList = new ArrayList<>();
-    private int correctAnswerScoreSum;
+    private String title;
+    private String description;
+    private String content;
+    private String author;
+    private LocalDateTime creationDate;
+    private String className;
+
+
 }

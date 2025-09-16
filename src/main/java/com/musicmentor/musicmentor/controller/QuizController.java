@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
@@ -29,14 +31,12 @@ public class QuizController {
 
     @PostMapping("/addQuiz")
     public ResponseEntity<AddQuizRequest> addQuiz(@RequestBody AddQuizRequest quiz) {
-        System.out.println("Received user: " + quiz);
         quizService.createQuiz(quiz);
         return ResponseEntity.status(HttpStatus.CREATED).body(quiz);
     }
 
     @PostMapping("/addQuestions")
     public ResponseEntity<AddQuestionRequest> addQuestions(@RequestBody AddQuestionRequest addQuestionRequest) {
-        System.out.println("Received user: " + addQuestionRequest);
         quizService.addQuestions(addQuestionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(addQuestionRequest);
     }
@@ -66,15 +66,5 @@ public class QuizController {
     public ResponseEntity <List<Quiz>> getQuizzesByClass(@RequestParam String className, @RequestParam Integer userId) {
         List <Quiz> quizList = quizService.getQuizzesByClass(className, userId);
         return ResponseEntity.status(HttpStatus.OK).body(quizList);
-    }
-    @PostMapping("/saveQuizAnswer")
-    public ResponseEntity<Answer> saveQuizAnswer(@RequestParam Integer quizId, @RequestParam Integer userId) {
-        Answer answer = quizService.saveQuizAnswer(quizId, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(answer);
-    }
-    @PostMapping("/checkQuizCorrectAnswer")
-    public ResponseEntity <List<Question>> checkQuizCorrectAnswer (@RequestParam Integer quizId) {
-        List<Question> questionList = quizService.checkQuizCorrectAnswer(quizId);
-        return ResponseEntity.status(HttpStatus.OK).body(questionList);
     }
 }

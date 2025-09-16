@@ -8,6 +8,7 @@ import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
 import com.musicmentor.musicmentor.request.QuestionRequest;
 import com.musicmentor.musicmentor.response.QuizResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,6 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private UserService userService;
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
 
     public Quiz createQuiz(AddQuizRequest addQuizRequest) {
         Quiz quiz = new Quiz();
@@ -64,6 +64,9 @@ public class QuizService {
             questionRepository.save(questionToAdd);
 
         }
+        int numberOfQuestions = addQuestionRequest.getQuestionList().size();
+        quiz.setNumberOfQuestions(numberOfQuestions);
+        quizRepository.save(quiz);
         return updateQuizScore(addQuestionRequest.getQuizId());
     }
 
@@ -113,21 +116,6 @@ public class QuizService {
         }
         return quizListFilter;
     }
-    public List<Question> checkQuizCorrectAnswer(Integer quizId) {
-      Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
-       List <Question> questionList =  quiz.getQuestions();
-       Map<Integer,String> answerList = new HashMap<>();
-       answerList.put(1,"answer1");
-        Stream<Question> questionStream = questionList.stream().filter(question -> question.getCorrectAnswer().equals(answerList.get(1)));
-        return questionList;
-    }
-    public Answer saveQuizAnswer (Integer quizId, Integer userId) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
-        Answer answer = new Answer();
-        answer.setQuizId(quizId);
-        answer.setUserId(userId);
-       // answer.setAnswerList(answersMap);
-        answerRepository.save(answer);
-        return answer;
-    }
+
+
 }
