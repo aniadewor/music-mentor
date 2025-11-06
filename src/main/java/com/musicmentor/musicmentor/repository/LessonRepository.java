@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Integer>{
     List<Lesson> findByClassName(String className);
+    List <Lesson> findByAuthor(String author);
 }

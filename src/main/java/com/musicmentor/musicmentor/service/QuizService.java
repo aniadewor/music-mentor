@@ -4,10 +4,13 @@ import com.musicmentor.musicmentor.model.*;
 import com.musicmentor.musicmentor.repository.AnswerRepository;
 import com.musicmentor.musicmentor.repository.QuestionRepository;
 import com.musicmentor.musicmentor.repository.QuizRepository;
+import com.musicmentor.musicmentor.repository.UserRepository;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
 import com.musicmentor.musicmentor.request.QuestionRequest;
 import com.musicmentor.musicmentor.response.QuizResponse;
+import com.musicmentor.musicmentor.response.TeacherQuizResponse;
+import com.musicmentor.musicmentor.response.UserQuizResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import java.util.stream.Stream;
 @Service
 public class QuizService {
     private final QuizRepository quizRepository;
+    private final AnswerRepository answerRepository;
+    private final UserRepository userRepository;
     private UserService userService;
     private final QuestionRepository questionRepository;
 
@@ -81,35 +86,76 @@ public class QuizService {
         quizResponse.setQuestionList(question);
         return quizResponse;
     }
+
     public int updateQuizScore(Integer quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
         List<Question> question = questionRepository.findAllByQuizId(quizId);
-        int scoreSum =0;
+        int scoreSum = 0;
         for (Question question1 : question) {
-           scoreSum += question1.getScore();
+            scoreSum += question1.getScore();
         }
         quiz.setScoreSum(scoreSum);
         quizRepository.save(quiz);
         return scoreSum;
     }
+
+    public List<UserQuizResponse> getUserQuizDate(Integer userId) {
+        List<UserQuizResponse> userQuizResponses = new ArrayList<>();
+        answerRepository.findByUserId(userId).forEach(answer -> {
+            UserQuizResponse userQuizResponse = new UserQuizResponse();
+            userQuizResponse.setScore(answer.getCorrectAnswerScoreSum());
+            quizRepository.findById(answer.getQuizId()).ifPresent(quiz -> {
+                userQuizResponse.setTitle(quiz.getTitle());
+                userQuizResponse.setScoreSum(quiz.getScoreSum());
+            });
+            userQuizResponses.add(userQuizResponse);
+        });
+        return userQuizResponses;
+    }
+
+    public List<TeacherQuizResponse> getTeacherQuizDate(String className) {
+        List<TeacherQuizResponse> teacherQuizResponses = new ArrayList<>();
+
+        userRepository.findByClassName(className).forEach(student -> {
+            answerRepository.findByUserId(student.getId()).forEach(answer -> {
+                TeacherQuizResponse resp = new TeacherQuizResponse();
+                resp.setName(student.getName());
+                resp.setLastName(student.getLastName());
+                resp.setScore(answer.getCorrectAnswerScoreSum());
+
+                quizRepository.findById(answer.getQuizId()).ifPresent(quiz -> {
+                    resp.setScoreSum(quiz.getScoreSum());
+                    resp.setTitle(quiz.getTitle());
+                });
+
+                teacherQuizResponses.add(resp);
+            });
+        });
+
+        return teacherQuizResponses;
+    }
+
+
     public List<Quiz> getQuizzesByUserId(User owner) {
-       List<Quiz> quiz = quizRepository.findByOwner(owner);
+        List<Quiz> quiz = quizRepository.findByOwner(owner);
         return quiz;
     }
+
     public Quiz updateClassName(Integer quizId, List<String> className) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
         quiz.setClassName(className);
         quizRepository.save(quiz);
         return quiz;
     }
+
     public List<Quiz> getQuizzesByClass(String className, Integer studentId) {
         Optional<User> student = userService.getUserById(studentId);
         String studentSchoolName = student.get().getSchoolName();
         List<Quiz> quizList = quizRepository.findByClassName(className);
-        List <Quiz> quizListFilter = new ArrayList<>();
+        List<Quiz> quizListFilter = new ArrayList<>();
         for (Quiz quiz1 : quizList) {
-            if (quiz1.getSchoolName() != null){
-                if (quiz1.getSchoolName().equals(studentSchoolName)){
+            if (quiz1.getSchoolName() != null) {
+                if (quiz1.getSchoolName().equals(studentSchoolName)) {
                     quizListFilter.add(quiz1);
                 }
             }

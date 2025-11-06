@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer,Integer>{
     List<Answer> findByUserIdAndQuizId(Integer userId, Integer quizId);
-
+    List <Answer> findByUserId(Integer userId);
 }

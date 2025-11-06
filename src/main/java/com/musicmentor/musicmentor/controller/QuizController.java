@@ -5,6 +5,8 @@ import com.musicmentor.musicmentor.repository.UserRepository;
 import com.musicmentor.musicmentor.request.AddQuestionRequest;
 import com.musicmentor.musicmentor.request.AddQuizRequest;
 import com.musicmentor.musicmentor.response.QuizResponse;
+import com.musicmentor.musicmentor.response.TeacherQuizResponse;
+import com.musicmentor.musicmentor.response.UserQuizResponse;
 import com.musicmentor.musicmentor.service.QuizService;
 import com.musicmentor.musicmentor.service.UserService;
 import lombok.AllArgsConstructor;
@@ -50,6 +52,16 @@ public class QuizController {
     public ResponseEntity <?> updateQuizScore(@RequestParam Integer quizId) {
         int scoreSum = quizService.updateQuizScore(quizId);
         return ResponseEntity.status(HttpStatus.OK).body(scoreSum);
+    }
+    @GetMapping("/getUserQuizDate")
+    public ResponseEntity <List<UserQuizResponse>> getUserQuizDate (@RequestParam Integer userId) {
+        List<UserQuizResponse> userQuizResponses = quizService.getUserQuizDate(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userQuizResponses);
+    }
+    @GetMapping("/getTeacherQuizDate")
+    public ResponseEntity<List<TeacherQuizResponse>> getTeacherQuizDate (@RequestParam String className){
+        List<TeacherQuizResponse> teacherQuizResponses = quizService.getTeacherQuizDate(className);
+        return ResponseEntity.status(HttpStatus.OK).body(teacherQuizResponses);
     }
     @GetMapping ("/getQuizzesByUserId")
     public List<Quiz> getQuizzesByUserId(@RequestParam Integer userId) {

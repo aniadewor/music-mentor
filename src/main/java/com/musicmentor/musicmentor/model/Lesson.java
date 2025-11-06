@@ -25,6 +25,8 @@ public class Lesson {
     private String author;
     private LocalDateTime creationDate;
     private String className;
-
-
+    @Column(name = "image", columnDefinition = "BYTEA")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] image;
+    private String imageName;
 }
